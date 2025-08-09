@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <?php include 'header.php'; ?>
+    <?php include 'header.php'; // Incluye la cabecera de la página, que ahora inicia la sesión ?>
 
     <main>
         <section id="faq" class="section-padding bg-dark-alt">
@@ -61,7 +61,7 @@
         </section>
     </main>
 
-    <?php include 'footer.php'; ?>
+    <?php include 'footer.php'; // Incluye el pie de página ?>
 </body>
 
 </html>

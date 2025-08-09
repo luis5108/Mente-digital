@@ -1,50 +1,35 @@
 <?php
-
 session_start();
-$email = '';
+include 'conexion.php';
 
-$conexion_path = __DIR__ . '/conexion.php';
+if (isset($_POST['btn-login'])) {
+    $correo = trim($_POST['correo']);
+    $clave = trim($_POST['password']);
 
-if (!empty($_POST["btn-primary"])) {
-    
-
-    $correo = $_POST["correo"];
-
-    $clave = $_POST["clave"];
-
-    $admin = isset($_POST["admin"]);
-    
-
-    $email = $correo;
-    
     if (empty($correo) || empty($clave)) {
-        $error = 'LOS CAMPOS ESTÁN VACÍOS';
+        $error = "Los campos están vacíos.";
     } else {
+        $sql = $conexion->prepare("SELECT * FROM usuarios WHERE email = ? AND password = ?");
+        $sql->bind_param("ss", $correo, $clave);
+        $sql->execute();
+        $resultado = $sql->get_result();
 
-        if ($admin) {
-            $sql = $conexion->query("SELECT * FROM usuarios WHERE correo='$correo' AND contraseña='$clave'");
-        } else {
-            $sql = $conexion->query("SELECT * FROM usuarios WHERE correo='$correo' AND contraseña='$clave'");
-        }
-
-        if ($datos = $sql->fetch_object()) {
+        if ($datos = $resultado->fetch_object()) {
             $_SESSION["usuario_id"] = $datos->id;
-            
-            $_SESSION["usuario_correo"] = $datos->correo;
-            
-            $_SESSION["es_admin"] = $admin;
-            
+            $_SESSION["usuario_correo"] = $datos->email;
             $_SESSION["usuario_nombre"] = $datos->nombre;
-            
-            if ($admin) {
-                header("Location: ../index.php");
+            $_SESSION["usuario_rol"] = trim(strtolower($datos->rol));
+
+            if ($_SESSION["usuario_rol"] === 'admin') {
+                header("Location: dashboard.php");
             } else {
-                header("Location: ../index.php");
+                header("Location: index.php");
             }
             exit;
         } else {
-            $error = 'ACCESO DENEGADO';
+            $error = "Correo o contraseña incorrectos.";
         }
     }
 }
+
 ?>

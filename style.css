@@ -303,7 +303,7 @@ body {
 .contact-form textarea:focus,
 .comparison-form select:focus {
   /* Added select for comparison form */
-  border-color: #e000e0; /* neon-pink */
+  border-color: #e000e0;
   box-shadow: 0 0 8px rgba(224, 0, 224, 0.5);
   outline: none;
 }
